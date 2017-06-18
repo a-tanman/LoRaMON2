@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+<link rel="stylesheet" type="text/css" href="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.css" />
+<script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-core.js"></script>
+<script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-service.js"></script>
+<script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+<script type="text/javascript" src="https://js.cit.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="/socket.io/socket.io.js"></script> 
+
+</head>
+<body>
+  <div id="map" style="width: 100%; height: 400px; background: grey" />
+
+
+<style type="text/css">
+.on { 
+color:white;
+background:red;
+font-size: 20px;
+text-align: center;
+border: 0;
+}
+
+.off {
+color: white;
+background:red; 
+font-size: 20px; 
+text-align: center;
+border: 0;
+}
+
+p, input{display:inline-block}
+
+</style>
+
+<script language="javascript">
+function togglestyle(el){
+    if(el.className == "on") {
+        el.className="off";
+    } else {
+        el.className="on";
+    }
+}
+</script>
+  <script  type="text/javascript" charset="UTF-8" >
+
+
+var volt = 12; 
+var icon_green = new H.map.Icon('battery_green_32.png');
+var icon_red = new H.map.Icon('battery_red_32.png') 
+/**
+ * Moves the map to display over Berlin
+ *
+ * @param  {H.Map} map      A HERE Map instance within the application
+ */
+function moveMapToSingapore(map){
+  map.setCenter({lat: 1.304049, lng: 103.832184});
+  //lat: 1.304049, lng: 103.832184
+  map.setZoom(18);
+}
+
+
+/**
+ * Creates a new marker and adds it to a group
+ * @param {H.map.Group} group       The group holding the new marker
+ * @param {H.geo.Point} coordinate  The location of the marker
+ * @param {String} html             Data associated with the marker
+ */
+function addMarkerToGroup(group, coordinate, icon, html) {
+  var marker = new H.map.Marker(coordinate, {icon: icon});
+  // add custom data to the marker
+  marker.setData(html);
+  group.addObject(marker);
+}
+
+/**
+ * Add two markers showing the position of Liverpool and Manchester City football clubs.
+ * Clicking on a marker opens an infobubble which holds HTML content related to the marker.
+ * @param  {H.Map} map      A HERE Map instance within the application
+ */
+function addInfoBubble(map) {
+  var group = new H.map.Group();
+
+  map.addObject(group);
+
+  // add 'tap' event listener, that opens info bubble, to the group
+  group.addEventListener('tap', function (evt) {
+    // event target is the marker itself, group is a parent event target
+    // for all objects that it contains
+    var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+      // read custom data
+      content: evt.target.getData()
+    });
+    // show info bubble
+    ui.addBubble(bubble);
+  }, false);
+
+  if(volt >= 6){
+  addMarkerToGroup(group, {lat: 1.304049, lng: 103.832184}, icon_green,
+    '<div><a href=\'http://www.mcfc.co.uk\' >LoRaMON</a>' +
+    '</div><div >Node 1<br>Voltage: ' + volt + 'V</div>');
+  $('input[id=btn]').hide();
+}else if (volt < 6){
+addMarkerToGroup(group, {lat: 1.304049, lng: 103.832184}, icon_red,
+    '<div><a href=\'http://www.mcfc.co.uk\' >LoRaMON</a>' +
+    '</div><div >Node 1<br>Voltage: ' + volt + 'V</div>');
+$('input[id=btn]').show();
+}
+  addMarkerToGroup(group, {lat:1.297, lng:103.787}, icon_green,
+    '<div ><a href=\'http://www.liverpoolfc.tv\' >LoRaMON</a>' +
+    '</div><div >Node 2<br>Voltage: 11.1V</div>');
+
+}
+
+
+
+/**
+ * Boilerplate map initialization code starts below:
+ */
+
+//Step 1: initialize communication with the platform
+var platform = new H.service.Platform({
+  app_id: 'E3cW2NJ2gwGrNbBDwWi6',
+  app_code: 'bzh3OKiWz2Qr_mt341WjOw',
+  useCIT: true,
+  useHTTPS: true
+});
+var defaultLayers = platform.createDefaultLayers();
+
+//Step 2: initialize a map  - not specificing a location will give a whole world view.
+var map = new H.Map(document.getElementById('map'),
+  defaultLayers.normal.map);
+
+
+//Step 3: make the map interactive
+// MapEvents enables the event system
+// Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+// Create the default UI components
+var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+// Now use the map as required...
+moveMapToSingapore(map);
+addInfoBubble(map)
+
+
+$(document).ready(function () {
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+
+    
+
+    Highcharts.chart('container', {
+        chart: {
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in old IE
+            marginRight: 10,
+            events: {
+                load: function () {
+            
+            volt = 0;
+            var socket = io();
+            socket.on('message', function(data){
+              volt = data;
+              addInfoBubble(map)
+              //document.write(data);
+            })
+                    // set up the updating of the chart each second
+                    var series = this.series[0];
+                    setInterval(function () {
+                        var x = (new Date()).getTime(); // current time
+                        y = volt;//Math.random();
+                        series.addPoint([x, y], true, true);
+                        if (y<6){
+                          series.update({
+                            color: '#ff0000'
+                          })
+                        } else {
+                          series.update({
+                            color: '#0000ff'
+                          })
+                        }
+                    }, 1000);
+                }
+            }
+        },
+        title: {
+            text: 'Battery Voltage'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: 'Voltage'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 2);
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        series: [{
+            color: '#0000FF',
+            name: 'Voltage',
+            data: (function () {
+                // generate an array of random data
+                var data = [],
+                    time = (new Date()).getTime(),
+                    i;
+
+                for (i = -5; i <= 0; i += 1) {
+                    data.push({
+                        x: time + i * 1000,
+                        y: 10*Math.random()
+                    });
+                }
+                return data;
+            }())
+        }]
+    });
+});
+  </script>
+  <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  <div style="text-align:center;">
+  <input type="button" id="btn" value="Order New Battery" class="off" onclick="togglestyle(this)" />
+</div>
+</body>
+
+
+
+</html>

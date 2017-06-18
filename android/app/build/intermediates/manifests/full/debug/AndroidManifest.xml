@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.here.android.example.venue"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="23" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+
+        <!--
+         Developers should put application credentials here.To obtain them, please register the application
+         at https://developer.here.com/develop/mobile-sdks
+        -->
+        <meta-data
+            android:name="com.here.android.maps.appid"
+            android:value="CjNz39Lw4EhrDNyr0BiU" />
+        <meta-data
+            android:name="com.here.android.maps.apptoken"
+            android:value="LXIEG6aaia-wHwby5ymmQQ" />
+        <meta-data
+            android:name="com.here.android.maps.license.key"
+            android:value="gUXw+3Lss5LwRPtpyQIJtoisECGwodUKUdcnqRsn6RtW1/Yev+EmytenXBmcfNObOT8B2Nx9ezKGmM6DrdfhFd4hEWg9+/r0psU2B9AtTdaVDQRX577P4sn65Xl+zKRyL+H/WyXZU16yb4ai7OPcrJnz7Pcu+fvf3TqvX0j3tP8HkYPCFu3yxz1ZOx6Uo/qDJfvC3D3/hER7+SFvlIdqv6BalOhhCxGy0enNjCaJ+ucl075/QYPo83nQDMggf7ZYKeToAkeBc7sEP3h1neCW6THR355YQTOds3cVC+sc4K/C8WdV17b71FjAVE5eTdwnMqZBBoYf+BZ+d+3E3dhx7bMzFOvE8CyYDNS4WiwsIfGevknj0eP+3B7WhfBU/svBySnTbyEVnezt5J6frgfAspFULlqIgzvXz8B/M+ytiobwpVqwC0DKm6DxKyWfnaiAWN8V3vhpY9CecjzyifUqJKXWDBxbGDdNSQQJ6GZTN7VaxOaWgUK3oIf8SanILdWf37QcU3KMZTD0Rz/41gpoFLw1UvyLJ3OtYaV6T/yW/91rS82JhYSC0RnJQKBHr0XTjF0/cBZHQJXnXDHfx62TVCeSOxNnKCNOhISqClxQWLoVmqeruz8chKO6jDdaaNT/P5l05yy5aU4ZvG/uZI/m9iIL3kHWe71jQUs9isl5pro=" />
+
+        <activity
+            android:name="com.here.android.example.venue.Venue3dActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.here.android.mpa.service.MapService"
+            android:label="HereMapService"
+            android:process="global.Here.Map.Service.v2" >
+            <intent-filter>
+                <action android:name="com.here.android.mpa.service.MapService" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

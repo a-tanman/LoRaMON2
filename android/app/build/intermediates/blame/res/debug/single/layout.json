@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/build/intermediates/res/merged/debug/layout/floor_item.xml",
+        "source": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/src/main/res/layout/floor_item.xml"
+    },
+    {
+        "merged": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/build/intermediates/res/merged/debug/layout/venues3d.xml",
+        "source": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/src/main/res/layout/venues3d.xml"
+    }
+]

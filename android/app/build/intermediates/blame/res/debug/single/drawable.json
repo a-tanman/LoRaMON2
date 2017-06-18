@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/build/intermediates/res/merged/debug/drawable/floor_item_background.xml",
+        "source": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/src/main/res/drawable/floor_item_background.xml"
+    },
+    {
+        "merged": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/build/intermediates/res/merged/debug/drawable/battery_red_32.png",
+        "source": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/src/main/res/drawable/battery_red_32.png"
+    },
+    {
+        "merged": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/build/intermediates/res/merged/debug/drawable/ic_launcher.png",
+        "source": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/src/main/res/drawable/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/build/intermediates/res/merged/debug/drawable/battery_green_32.png",
+        "source": "/Users/andrewtan/development/here/here-android-sdk-examples/3d-venues-and-indoor-routing/app/src/main/res/drawable/battery_green_32.png"
+    }
+]
